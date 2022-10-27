@@ -8,9 +8,11 @@ package nguyencongngo.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -82,7 +84,9 @@ public class BuyCart extends HttpServlet {
         } catch (SQLException | NamingException ex) {
 
         } finally {
-            response.sendRedirect(MyAppConstraint.viewCartController);
+//            response.sendRedirect(MyAppConstraint.viewCartController);
+            RequestDispatcher rd = request.getRequestDispatcher(MyAppConstraint.viewCartController);
+            rd.forward(request, response);
             out.close();
         }
     }

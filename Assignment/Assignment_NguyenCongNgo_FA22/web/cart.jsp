@@ -44,12 +44,13 @@
                     </thead>
                     <form action="DistpatchController">
                         <tbody>
+                            <c:set var="over" value="${requestScope.OVERQUANTITY}"/>
                             <c:forEach var="cartList" items="${cart}" varStatus="counter">
                                 <c:url var="deleteCart" value="DeleteCartController">
                                     <c:param name="txtUsername" value="${user.username}"/>
                                     <c:param name="txtId" value="${cartList.id}"/>
                                 </c:url>
-
+                                
 
                                 <tr id="yourCart">
                                     <td data-th="Product">
@@ -83,8 +84,13 @@
                                     <td class="actions" data-th="">
                                         <a href="${deleteCart}" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
                                         <input type="checkbox" name="txtchk" value="a" />
+                                        <c:forEach var="overLoad" items="${over}" varStatus="counter">
+                                            <c:if test="${overLoad == cartList.id}">
+                                                <span style="color: red">Too</span>
+                                            </c:if>
+                                        </c:forEach>
                                     </td>
-                                    <td>
+<!--                                    <td>-->
 
                                 </tr>
 

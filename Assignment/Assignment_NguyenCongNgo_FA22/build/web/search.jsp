@@ -240,19 +240,24 @@
                 if (isNaN(price)) {
                     document.getElementById("priceError").innerHTML = "Must Number here !!!";
                     error = true;
-                } else{
+                } else {
                     document.getElementById("priceError").innerHTML = "";
                 }
                 if (isNaN(quantity)) {
                     document.getElementById("quantityError").innerHTML = "Must Number here !!!";
                     error = true;
-                } else{
-                    document.getElementById("quantityError").innerHTML = "";
+                } else {
+                    if (quantity <= 0) {
+                        document.getElementById("quantityError").innerHTML = "Quantity must be > 0";
+                        error = true;
+                    } else {
+                        document.getElementById("quantityError").innerHTML = "";
+                    }
                 }
                 if (startDate - endDate >= 0 || startDate == null || endDate == null) {
                     document.getElementById("endError").innerHTML = "End Date must be After Start Date";
                     error = true;
-                } else{
+                } else {
                     document.getElementById("endError").innerHTML = "";
                 }
                 if (error) {

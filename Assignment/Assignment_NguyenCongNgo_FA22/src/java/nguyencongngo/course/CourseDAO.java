@@ -21,25 +21,25 @@ import nguyencongngo.utils.DBhelper;
  * @author Admin
  */
 public class CourseDAO implements Serializable {
-
+    
     private List<CourseDTO> course;
     private List<String> categories;
-
+    
     public CourseDAO() {
     }
-
+    
     public CourseDAO(List<CourseDTO> course) {
         this.course = course;
     }
-
+    
     public List<CourseDTO> getCourse() {
         return course;
     }
-
+    
     public void setCourse(List<CourseDTO> course) {
         this.course = course;
     }
-
+    
     public List<CourseDTO> findCourseByName(String name) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -87,7 +87,7 @@ public class CourseDAO implements Serializable {
         }
         return this.course;
     }
-
+    
     public String getName(String id) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -119,7 +119,7 @@ public class CourseDAO implements Serializable {
         }
         return name;
     }
-
+    
     public List<CourseDTO> findCourseByCategory(String name, String category) throws SQLException, NamingException {
         List<CourseDTO> course = null;
         if (this.findCourseByName(name) != null) {
@@ -136,7 +136,7 @@ public class CourseDAO implements Serializable {
         }
         return course;
     }
-
+    
     public List<CourseDTO> listCourse() throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -180,7 +180,7 @@ public class CourseDAO implements Serializable {
         }
         return this.course;
     }
-
+    
     public void updateCourse(String user, String id, String name, String img, String des, int price, int quantity, String start, String end, String cate, boolean status, String date) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -206,6 +206,9 @@ public class CourseDAO implements Serializable {
                 stm.setString(11, name);
                 success = stm.executeUpdate();
                 if (success > 0) {
+                    if (quantity == 0) {
+                        this.updateStatus(id);
+                    }
                     sql = "SELECT updateUser, courseId "
                             + "FROM dbo.History "
                             + "WHERE updateUser = ? AND courseId = ? ";
@@ -245,7 +248,7 @@ public class CourseDAO implements Serializable {
             }
         }
     }
-
+    
     public void createCourse(String id, String name, String img, String des, int price, int quantity, String start, String end, boolean status, String cate) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -281,7 +284,7 @@ public class CourseDAO implements Serializable {
             }
         }
     }
-
+    
     public int getQuantity(String id) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -313,7 +316,7 @@ public class CourseDAO implements Serializable {
         }
         return quantity;
     }
-
+    
     public void updateQuantity(String id, int quantity) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
@@ -326,6 +329,32 @@ public class CourseDAO implements Serializable {
                 stm = conn.prepareStatement(sql);
                 stm.setInt(1, quantity);
                 stm.setString(2, id);
+                int result = stm.executeUpdate();
+                if (result > 0 && quantity == 0) {
+                    this.updateStatus(id);
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+    
+    public void updateStatus(String id) throws SQLException, NamingException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        try {
+            conn = DBhelper.makeConnection();
+            if (conn != null) {
+                String sql = "UPDATE dbo.Course "
+                        + "SET status = 0 "
+                        + "WHERE id = ? ";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, id);
                 stm.executeUpdate();
             }
         } finally {
@@ -337,10 +366,10 @@ public class CourseDAO implements Serializable {
             }
         }
     }
-
+    
     public static void main(String[] args) {
         Date date = new Date();
         System.out.println(date.toString());
     }
-
+    
 }

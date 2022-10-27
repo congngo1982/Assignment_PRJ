@@ -52,6 +52,7 @@ public class ViewCartController extends HttpServlet {
             if (account != null && !account.isIsAdmin()) {
                 CartDAO dao = new CartDAO();
                 List<CartDTO> dto = dao.viewCart(account.getUsername());
+                List<String> ID = new ArrayList<>();
                 if (dto != null) {
                     int total = 0;
                     List<CourseDTO> cart = new ArrayList<>();
@@ -64,20 +65,26 @@ public class ViewCartController extends HttpServlet {
                         String name = result[1];
                         String des = result[3];
 //                        System.out.println("Result 2: " + result[2]);
-                        int quantity = dto.get(i).getQuantity();                        
+                        int quantity = dto.get(i).getQuantity();
 //                        System.out.println("Quantity:" + quantity);
                         int price = Integer.parseInt(result[4]);
                         String image = result[2];
                         CourseDTO view = new CourseDTO(id, name, image, des, price, quantity);
                         cart.add(view);
                         total += price * quantity;
+                        int cartQuantity = (new CourseDAO()).getQuantity(id);
+                        if (cartQuantity < quantity) {
+                            ID.add(id);
+                        }
 //                        System.out.println(view);
                     }
                     request.setAttribute("CART", cart);
                     request.setAttribute("TOTAL", total);
+                    request.setAttribute("OVERQUANTITY", ID);
                 }
 
             } else if (account == null) {
+                List<String> ID = new ArrayList<>();
                 List<String> course = (List<String>) session.getAttribute("CARTNOLOGIN");
                 HashMap<String, Integer> courseList = (HashMap<String, Integer>) session.getAttribute("CARTNOLOGIN1");
                 CourseDAO courseDao = new CourseDAO();
@@ -97,9 +104,16 @@ public class ViewCartController extends HttpServlet {
                         CourseDTO view = new CourseDTO(id, name, image, des, price, quantity);
                         cart.add(view);
                         total += price * quantity;
-                        request.setAttribute("CART", cart);
-                        request.setAttribute("TOTAL", total);
+//                        request.setAttribute("CART", cart);
+//                        request.setAttribute("TOTAL", total);
+                        int cartQuantity = (new CourseDAO()).getQuantity(id);
+                        if (cartQuantity < quantity) {
+                            ID.add(id);
+                        }
                     }
+                    request.setAttribute("CART", cart);
+                    request.setAttribute("TOTAL", total);
+                    request.setAttribute("OVERQUANTITY", ID);
                 }
             }
         } catch (SQLException | NamingException ex) {

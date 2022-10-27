@@ -68,15 +68,18 @@ public class ShoppingDAO implements Serializable {
         return this.shopping;
     }
 
-    public void checkOut(ShoppingDTO dto) throws SQLException, NamingException {
+    public String checkOut(ShoppingDTO dto) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
+        String id = "";
         try {
             conn = DBhelper.makeConnection();
             if (conn != null) {
                 CourseDAO courseDAO = new CourseDAO();
-                if (dto.getQuantity() <= courseDAO.getQuantity(dto.getCourseId())) {
+                int courseQuantity = courseDAO.getQuantity(dto.getCourseId());
+                if (dto.getQuantity() <= courseQuantity) {
+                    courseDAO.updateQuantity(dto.getCourseId(), courseQuantity - dto.getQuantity());
                     String sql = "INSERT INTO dbo.Shopping (username, courseId, quantity, price, date) "
                             + "VALUES(?, ?, ?, ?, ?) ";
                     stm = conn.prepareStatement(sql);
@@ -88,6 +91,8 @@ public class ShoppingDAO implements Serializable {
                     stm.executeUpdate();
                     CartDAO dao = new CartDAO();
                     dao.deleteCart(dto.getUsername(), dto.getCourseId());
+                } else {
+                    id += dto.getCourseId();
                 }
 
             }
@@ -102,6 +107,7 @@ public class ShoppingDAO implements Serializable {
                 conn.close();
             }
         }
+        return id;
     }
 
 }
