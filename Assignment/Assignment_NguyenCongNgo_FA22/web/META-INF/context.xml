@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/Assignment_NguyenCongNgo_FA22">
+    <Resource name="ngoConnection" type="javax.sql.DataSource" auth="Container"
+              driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+              url="jdbc:sqlserver://localhost:1433;databaseName=NguyenCongNgo_FA22_Assignment"
+              username="sa" password="12345"
+    />
+    <!--<Context disableURLRewriting="true" cookies="false" />-->
+</Context>
