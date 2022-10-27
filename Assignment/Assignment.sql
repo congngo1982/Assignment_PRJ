@@ -22,6 +22,7 @@ status BIT NOT NULL,
 )
 
 ALTER TABLE [Course]
+ADD FOREIGN KEY (createUser) REFERENCES Account(username),
 ADD FOREIGN KEY (category) REFERENCES [Category](id)
 
 CREATE TABLE [Category] (

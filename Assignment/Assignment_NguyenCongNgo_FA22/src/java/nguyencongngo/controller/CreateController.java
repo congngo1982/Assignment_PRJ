@@ -60,7 +60,7 @@ public class CreateController extends HttpServlet {
                     CourseDAO dao = new CourseDAO();
                     Date date = new Date();
                     int ID = dao.listCourse().size();
-                    dao.createCourse(String.valueOf(++ID), name, img, des, price, quantity, start, end, status, cate);
+                    dao.createCourse(String.valueOf(++ID), name, img, des, price, quantity, start, end, status, cate, user.getUsername());
                 } catch (SQLException ex) {
                     System.out.println(ex);
                 } catch (NamingException ex) {

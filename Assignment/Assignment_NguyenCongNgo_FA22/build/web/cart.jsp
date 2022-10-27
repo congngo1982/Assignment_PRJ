@@ -50,7 +50,7 @@
                                     <c:param name="txtUsername" value="${user.username}"/>
                                     <c:param name="txtId" value="${cartList.id}"/>
                                 </c:url>
-                                
+
 
                                 <tr id="yourCart">
                                     <td data-th="Product">
@@ -78,19 +78,22 @@
                                         <span style="border: 1px solid green; border-radius: 2px; margin-left: 2px; margin-right: 2px; padding-left: 5px; padding-right: 5px">${cartList.quantity}</span>
                                         <a href="${plusCart}"><span class="glyphicon glyphicon-plus"></span></a>
                                     </td>
-                                    <td data-th="Subtotal" class="text-center">$ ${cartList.price * cartList.quantity}
+                                    <td data-th="Subtotal" class="text-center">${cartList.price * cartList.quantity}
+                                        <span id="-${counter.count}" style="display: none;">${cartList.price * cartList.quantity}</span>
                                         <input type="hidden" name="txtPricee" value="${cartList.price * cartList.quantity}" />
                                     </td>
                                     <td class="actions" data-th="">
                                         <a href="${deleteCart}" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-                                        <input type="checkbox" name="txtchk" value="a" />
+                                            <c:set var="chkId" value="${counter.count}"/>
+                                            <c:set var="subId" value="-${counter.count}"/>
+                                        <input type="checkbox" id="${counter.count}" onclick="calTotal(${chkId}, ${subId})" name="txtchk" value="a"/>
                                         <c:forEach var="overLoad" items="${over}" varStatus="counter">
                                             <c:if test="${overLoad == cartList.id}">
-                                                <span style="color: red">Too</span>
+                                                <span style="color: red">Your quantity is too Large</span>
                                             </c:if>
                                         </c:forEach>
                                     </td>
-<!--                                    <td>-->
+                                    <!--                                    <td>-->
 
                                 </tr>
 
@@ -104,7 +107,7 @@
                             <tr>
                                 <td><a href="search.jsp" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
                                 <td colspan="2" class="hidden-xs"></td>
-                                <td class="hidden-xs text-center"><strong>Total $ ${requestScope.TOTAL}</strong></td>
+                                <td class="hidden-xs text-center"><strong>Total $ <span id="total">0</span></strong></td>
                                 <td>
                                     <input  class="btn btn-success btn-block" type="submit" value="Checkout" name="btAction" />
                                 </td>
@@ -151,5 +154,23 @@
             <c:if test="${user.isAdmin == true}">
                 <h1>You cannot access this Page</h1>
             </c:if>
+
+            <script>
+                var total = 0;
+                function calTotal(chkId, subId) {
+                    var check = document.getElementById(chkId);
+                    var value = document.getElementById(subId);
+                    console.log(check.checked);
+                    console.log(value.innerHTML);
+                    if (check.checked == true) {
+                        console.log('isNan: ' + isNaN(document.getElementById(subId).innerHTML))
+                        total += parseInt(document.getElementById(subId).innerHTML);
+                    } else {
+                        total -= parseInt(document.getElementById(subId).innerHTML);
+                    }
+                    document.getElementById('total').innerHTML = total;
+                }
+
+            </script>
     </body>
 </html>

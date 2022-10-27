@@ -249,7 +249,7 @@ public class CourseDAO implements Serializable {
         }
     }
     
-    public void createCourse(String id, String name, String img, String des, int price, int quantity, String start, String end, boolean status, String cate) throws SQLException, NamingException {
+    public void createCourse(String id, String name, String img, String des, int price, int quantity, String start, String end, boolean status, String cate, String createUser) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement stm = null;
         int success = 0;
@@ -257,8 +257,8 @@ public class CourseDAO implements Serializable {
         try {
             conn = DBhelper.makeConnection();
             if (conn != null) {
-                String sql = "INSERT INTO dbo.Course (id, name, image, description, price, quantity, startDate, endDate, status, category) "
-                        + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+                String sql = "INSERT INTO dbo.Course (id, name, image, description, price, quantity, startDate, endDate, status, category, [createUser]) "
+                        + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
                 stm = conn.prepareStatement(sql);
                 stm.setString(1, id);
                 stm.setString(2, name);
@@ -270,6 +270,7 @@ public class CourseDAO implements Serializable {
                 stm.setString(8, end);
                 stm.setBoolean(9, status);
                 stm.setString(10, cate);
+                stm.setString(11, createUser);
                 success = stm.executeUpdate();
             }
         } finally {

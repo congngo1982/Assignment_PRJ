@@ -89,7 +89,7 @@ public class ViewCartController extends HttpServlet {
                 HashMap<String, Integer> courseList = (HashMap<String, Integer>) session.getAttribute("CARTNOLOGIN1");
                 CourseDAO courseDao = new CourseDAO();
                 List<CourseDTO> cart = new ArrayList<>();
-                int total = 0;
+//                int total = 0;
                 if (course != null) {
                     for (int i = 0; i < course.size(); i++) {
                         String result[] = courseDao.getName(course.get(i)).split(";");
@@ -103,7 +103,7 @@ public class ViewCartController extends HttpServlet {
                         String image = result[2];
                         CourseDTO view = new CourseDTO(id, name, image, des, price, quantity);
                         cart.add(view);
-                        total += price * quantity;
+//                        total += price * quantity;
 //                        request.setAttribute("CART", cart);
 //                        request.setAttribute("TOTAL", total);
                         int cartQuantity = (new CourseDAO()).getQuantity(id);
@@ -112,7 +112,7 @@ public class ViewCartController extends HttpServlet {
                         }
                     }
                     request.setAttribute("CART", cart);
-                    request.setAttribute("TOTAL", total);
+//                    request.setAttribute("TOTAL", total);
                     request.setAttribute("OVERQUANTITY", ID);
                 }
             }
