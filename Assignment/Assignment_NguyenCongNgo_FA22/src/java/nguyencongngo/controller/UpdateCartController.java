@@ -48,12 +48,13 @@ public class UpdateCartController extends HttpServlet {
             String courseId = request.getParameter("txtId");
             int quantity = Integer.parseInt(request.getParameter("txtQuantity"));
             if (user != null && !user.isIsAdmin()) {
+                CartDAO dao = new CartDAO();
                 courseId = request.getParameter("txtId");
-                quantity = Integer.parseInt(request.getParameter("txtQuantity"));
+                int cartQuantity = dao.checkPrimaryKey(user.getUsername(), courseId);
+                quantity = Integer.parseInt(request.getParameter("txtQuantity")) + cartQuantity;
                 System.out.println("Update: " + quantity);
                 if (quantity > 0) {
                     Date date = new Date();
-                    CartDAO dao = new CartDAO();
                     if (dao.checkPrimaryKey(user.getUsername(), courseId) > 0) {
                         dao.updateCart(user.getUsername(), courseId, date.toString(), quantity);
                     }
@@ -66,13 +67,14 @@ public class UpdateCartController extends HttpServlet {
                 List<String> course = (List<String>) session.getAttribute("CARTNOLOGIN");
                 courseId = request.getParameter("txtId");
                 quantity = Integer.parseInt(request.getParameter("txtQuantity"));
-                if(quantity > 0){
-                    courseList.put(courseId, quantity);
-                } else {
+//                if (quantity > 0) {
+                courseList.put(courseId, quantity + courseList.get(courseId));
+//                } else {
+                if (courseList.get(courseId) == 0) {
                     courseList.remove(courseId);
                     course.remove(courseId);
                 }
-                
+//                }
             }
         } catch (SQLException | NamingException ex) {
             System.out.println(ex);

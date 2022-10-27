@@ -282,6 +282,62 @@ public class CourseDAO implements Serializable {
         }
     }
 
+    public int getQuantity(String id) throws SQLException, NamingException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int quantity = 0;
+        try {
+            conn = DBhelper.makeConnection();
+            if (conn != null) {
+                String sql = "SELECT quantity "
+                        + "FROM dbo.Course "
+                        + "WHERE id = ? ";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, id);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    quantity = rs.getInt("quantity");
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return quantity;
+    }
+
+    public void updateQuantity(String id, int quantity) throws SQLException, NamingException {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        try {
+            conn = DBhelper.makeConnection();
+            if (conn != null) {
+                String sql = "UPDATE dbo.Course "
+                        + "SET quantity = ? "
+                        + "WHERE id = ? ";
+                stm = conn.prepareStatement(sql);
+                stm.setInt(1, quantity);
+                stm.setString(2, id);
+                stm.executeUpdate();
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Date date = new Date();
         System.out.println(date.toString());

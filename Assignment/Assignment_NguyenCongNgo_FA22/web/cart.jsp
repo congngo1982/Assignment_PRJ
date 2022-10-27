@@ -43,15 +43,15 @@
                         </tr>
                     </thead>
                     <form action="DistpatchController">
-
                         <tbody>
                             <c:forEach var="cartList" items="${cart}" varStatus="counter">
                                 <c:url var="deleteCart" value="DeleteCartController">
                                     <c:param name="txtUsername" value="${user.username}"/>
                                     <c:param name="txtId" value="${cartList.id}"/>
                                 </c:url>
-                            <form action="DistpatchController">
-                                <tr>
+
+
+                                <tr id="yourCart">
                                     <td data-th="Product">
                                         <div class="row">
                                             <div class="col-sm-2 hidden-xs"><img src="${cartList.image}" alt="..." class="img-responsive"/></div>
@@ -64,21 +64,32 @@
                                     </td>
                                     <td data-th="Price">$ ${cartList.price}</td>
                                     <td data-th="Quantity">
-                                        <input type="number" class="form-control text-center" name="txtQuantity" value="${cartList.quantity}">
+                                        <c:url var="minusCart" value="UpdateCartController">
+                                            <c:param name="txtId" value="${cartList.id}"/>
+                                            <c:param name="txtQuantity" value="-1"/>
+                                        </c:url>
+                                        <c:url var="plusCart" value="UpdateCartController">
+                                            <c:param name="txtId" value="${cartList.id}"/>
+                                            <c:param name="txtQuantity" value="1"/>
+                                        </c:url>
+                                        <a href="${minusCart}"><span class="glyphicon glyphicon-minus"></span></a>
+                                        <input type="hidden"  name="txtQuantity" value="${cartList.quantity}">
+                                        <span style="border: 1px solid green; border-radius: 2px; margin-left: 2px; margin-right: 2px; padding-left: 5px; padding-right: 5px">${cartList.quantity}</span>
+                                        <a href="${plusCart}"><span class="glyphicon glyphicon-plus"></span></a>
                                     </td>
                                     <td data-th="Subtotal" class="text-center">$ ${cartList.price * cartList.quantity}
                                         <input type="hidden" name="txtPricee" value="${cartList.price * cartList.quantity}" />
                                     </td>
                                     <td class="actions" data-th="">
-                                        <button type="submit" name="btAction" value="UpdateCart" class="btn btn-info"><i class="fa fa-refresh"></i></button>
                                         <a href="${deleteCart}" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
                                         <input type="checkbox" name="txtchk" value="a" />
                                     </td>
                                     <td>
 
                                 </tr>
-                            </form>
-                        </c:forEach>
+
+
+                            </c:forEach>
                         </tbody>
                         <tfoot>
                             <!--                    <tr class="visible-xs">
@@ -93,8 +104,8 @@
                                 </td>
                             </tr>
                         </tfoot>
-
                     </form>
+
                 </table>
                 <c:if test="${not empty user}">
                     <a href="ViewShopping" class="btn btn-success">Your Shopping Bill <i class="fa fa-angle-right"></i></a>

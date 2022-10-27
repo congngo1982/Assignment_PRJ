@@ -60,13 +60,25 @@ public class BuyCart extends HttpServlet {
 //                    ShoppingDAO shopping = new ShoppingDAO();
 //                    shopping.checkOut(dto);
 //                }
-            String courseId = request.getParameter("txtId");
-            int quantity = Integer.parseInt(request.getParameter("txtQuantity"));
-            int price = Integer.parseInt(request.getParameter("txtPricee"));
+            String[] courseId = request.getParameterValues("txtId");
+            String[] quantityCart = request.getParameterValues("txtQuantity");
+
+            String[] priceCart = request.getParameterValues("txtPricee");
+            String[] chk = request.getParameterValues("txtchk");
+
             Date date = new Date();
-            ShoppingDTO dto = new ShoppingDTO(user.getUsername(), courseId, date.toString(), quantity, price);
-            ShoppingDAO shopping = new ShoppingDAO();
-            shopping.checkOut(dto);
+            if (chk != null) {
+                for (int i = 0; i < chk.length; i++) {
+                    if (chk[i] != null) {
+                        int quantity = Integer.parseInt(quantityCart[i]);
+                        int price = Integer.parseInt(priceCart[i]);
+                        ShoppingDTO dto = new ShoppingDTO(user.getUsername(), courseId[i], date.toString(), quantity, price);
+                        ShoppingDAO shopping = new ShoppingDAO();
+                        shopping.checkOut(dto);
+                    }
+                }
+            }
+
         } catch (SQLException | NamingException ex) {
 
         } finally {

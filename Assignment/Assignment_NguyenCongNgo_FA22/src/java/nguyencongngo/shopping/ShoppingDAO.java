@@ -75,17 +75,21 @@ public class ShoppingDAO implements Serializable {
         try {
             conn = DBhelper.makeConnection();
             if (conn != null) {
-                String sql = "INSERT INTO dbo.Shopping (username, courseId, quantity, price, date) "
-                        + "VALUES(?, ?, ?, ?, ?) ";
-                stm = conn.prepareStatement(sql);
-                stm.setString(1, dto.getUsername());
-                stm.setString(2, dto.getCourseId());
-                stm.setInt(3, dto.getQuantity());
-                stm.setInt(4, dto.getPrice());
-                stm.setString(5, dto.getDate());
-                stm.executeUpdate();
-                CartDAO dao = new CartDAO();
-                dao.deleteCart(dto.getUsername(), dto.getCourseId());
+                CourseDAO courseDAO = new CourseDAO();
+                if (dto.getQuantity() <= courseDAO.getQuantity(dto.getCourseId())) {
+                    String sql = "INSERT INTO dbo.Shopping (username, courseId, quantity, price, date) "
+                            + "VALUES(?, ?, ?, ?, ?) ";
+                    stm = conn.prepareStatement(sql);
+                    stm.setString(1, dto.getUsername());
+                    stm.setString(2, dto.getCourseId());
+                    stm.setInt(3, dto.getQuantity());
+                    stm.setInt(4, dto.getPrice());
+                    stm.setString(5, dto.getDate());
+                    stm.executeUpdate();
+                    CartDAO dao = new CartDAO();
+                    dao.deleteCart(dto.getUsername(), dto.getCourseId());
+                }
+
             }
         } finally {
             if (rs != null) {

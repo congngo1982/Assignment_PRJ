@@ -64,7 +64,7 @@ public class ViewCartController extends HttpServlet {
                         String name = result[1];
                         String des = result[3];
 //                        System.out.println("Result 2: " + result[2]);
-                        int quantity = dto.get(i).getQuantity();
+                        int quantity = dto.get(i).getQuantity();                        
 //                        System.out.println("Quantity:" + quantity);
                         int price = Integer.parseInt(result[4]);
                         String image = result[2];
