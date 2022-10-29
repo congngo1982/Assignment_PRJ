@@ -32,25 +32,33 @@
                 </c:otherwise>
             </c:choose>
             <div class="container">
-                <form action="DistpatchController">
+                <form id="form" action="DistpatchController">
                     <c:if test="${empty user}">
                         <h2 style="margin-top: 5%">Enter your Information To Buy</h2>
                         <table>
                             <tr>
                                 <td>Enter your Name </td>
-                                <td><input type="text" name="txtName" value="" required /></td>
+                                <td><input id="name" type="text" name="txtName" value="" required />
+                                    <span id="nameError"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Enter your Email: </td>
-                                <td><input type="text" name="txtEmail" value="" required /></td>
+                                <td><input id="email" type="text" name="txtEmail" value="" required />
+                                    <span id="emailError"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Enter your Address: </td>
-                                <td><input type="text" name="txtAddress" value="" required /></td>
+                                <td><input id="address" type="text" name="txtAddress" value="" required />
+                                    <span id="addressError"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Enter your Phone Number: </td>
-                                <td><input type="text" name="txtPhone" value="" required /></td>
+                                <td><input id="number" type="text" name="txtPhone" value="" required />
+                                    <span id="numberError"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Discount Code: </td>
@@ -176,6 +184,57 @@
                 document.getElementById('total').innerHTML = total;
             }
 
+            // Validate Form
+            var form = document.getElementById("form");
+            form.addEventListener('submit', (e) => {
+                var name = document.getElementById("name").value;
+                var email = document.getElementById("email").value;
+                var address = document.getElementById("address").value;
+                var number = document.getElementById("number").value;
+                var error = false;
+                if (name.trim() == '') {
+                    document.getElementById("nameError").innerHTML = "Not Empty here !!!";
+                    error = true;
+                } else {
+                    document.getElementById("nameError").innerHTML = "";
+                }
+                if (email.trim() == '') {
+                    document.getElementById("emailError").innerHTML = "Not Empty here !!!";
+                    error = true;
+                } else {
+                    document.getElementById("emailError").innerHTML = "";
+                }
+                if (!email.match(
+                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                        )) {
+                    document.getElementById("emailError").innerHTML = "Not Correct format of Email Address !!!";
+                    error = true;
+                } else {
+                    document.getElementById("emailError").innerHTML = "";
+                }
+                if (address.trim() == '') {
+                    document.getElementById("addressError").innerHTML = "Not Empty here !!!";
+                    error = true;
+                } else {
+                    document.getElementById("addressError").innerHTML = "";
+                }
+                if (number.trim() == '') {
+                    document.getElementById("numberError").innerHTML = "Not Empty here !!!";
+                    error = true;
+                } else {
+                    document.getElementById("numberError").innerHTML = "";
+                }
+                if (!number.match(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)) {
+                    document.getElementById("numberError").innerHTML = "Not Correct format of Phone Number !!!";
+                    error = true;
+                } else {
+                    document.getElementById("numberError").innerHTML = "";
+                }
+
+                if (error) {
+                    e.preventDefault();
+                }
+            })
         </script>
 </body>
 </html>
