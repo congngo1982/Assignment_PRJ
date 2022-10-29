@@ -52,6 +52,8 @@ public class DistpatchController extends HttpServlet {
                 url = MyAppConstraint.updateCartController;
             } else if(action.equals("Checkout")){
                 url = MyAppConstraint.buyCart;
+            } else if(action.equals("View Shopping Bill")){
+                url = MyAppConstraint.viewShopping;
             }
         } finally {
             System.out.println("Action: " + url);

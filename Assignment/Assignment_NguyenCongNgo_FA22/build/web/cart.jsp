@@ -32,17 +32,43 @@
                 </c:otherwise>
             </c:choose>
             <div class="container">
-                <table id="cart" class="table table-hover table-condensed">
-                    <thead>
-                        <tr>
-                            <th style="width:50%">Course</th>
-                            <th style="width:10%">Price</th>
-                            <th style="width:8%">Quantity</th>
-                            <th style="width:22%" class="text-center">Subtotal</th>
-                            <th style="width:10%">Action</th>
-                        </tr>
-                    </thead>
-                    <form action="DistpatchController">
+                <form action="DistpatchController">
+                    <c:if test="${empty user}">
+                        <h2 style="margin-top: 5%">Enter your Information To Buy</h2>
+                        <table>
+                            <tr>
+                                <td>Enter your Name </td>
+                                <td><input type="text" name="txtName" value="" required /></td>
+                            </tr>
+                            <tr>
+                                <td>Enter your Email: </td>
+                                <td><input type="text" name="txtEmail" value="" required /></td>
+                            </tr>
+                            <tr>
+                                <td>Enter your Address: </td>
+                                <td><input type="text" name="txtAddress" value="" required /></td>
+                            </tr>
+                            <tr>
+                                <td>Enter your Phone Number: </td>
+                                <td><input type="text" name="txtPhone" value="" required /></td>
+                            </tr>
+                            <tr>
+                                <td>Discount Code: </td>
+                                <td><input type="text" name="txtDiscount" value="" /></td>
+                            </tr>
+                        </table>
+                    </c:if>
+                    <table id="cart" class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="width:50%">Course</th>
+                                <th style="width:10%">Price</th>
+                                <th style="width:8%">Quantity</th>
+                                <th style="width:22%" class="text-center">Subtotal</th>
+                                <th style="width:10%">Action</th>
+                            </tr>
+                        </thead>
+
                         <tbody>
                             <c:set var="over" value="${requestScope.OVERQUANTITY}"/>
                             <c:forEach var="cartList" items="${cart}" varStatus="counter">
@@ -113,64 +139,43 @@
                                 </td>
                             </tr>
                         </tfoot>
-                    </form>
+                </form>
 
-                </table>
-                <c:if test="${not empty user}">
-                    <a href="ViewShopping" class="btn btn-success">Your Shopping Bill <i class="fa fa-angle-right"></i></a>
-                    </c:if>
-                    <c:if test="${empty user}">
-
-
-                    <!-- Modal -->
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">View Shopping Bill</button>
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Information</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="DistpatchController" method="POST">
-                                        Enter your Email: <input type="text" name="txtEmail" value="" /> <br>
-                                        Enter your Address: <input type="text" name="txtAddress" value="" /> <br>
-                                        Enter your Phone Number: <input type="text" name="txtPhone" value="" /> <br>
-                                        Discount Code: <input type="text" name="txtdiscount" value="" /> <br>
-                                    </form>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
+            </table>
+            <c:if test="${not empty user}">
+                <a href="ViewShopping" class="btn btn-success">Your Shopping Bill <i class="fa fa-angle-right"></i></a>
                 </c:if>
-                <c:if test="${empty cart}">
-                    <h2>No Items in Cart</h2>
-                </c:if>
-            </c:if>
-            <c:if test="${user.isAdmin == true}">
-                <h1>You cannot access this Page</h1>
-            </c:if>
+                <c:if test="${empty user}">
 
-            <script>
-                var total = 0;
-                function calTotal(chkId, subId) {
-                    var check = document.getElementById(chkId);
-                    var value = document.getElementById(subId);
-                    console.log(check.checked);
-                    console.log(value.innerHTML);
-                    if (check.checked == true) {
-                        console.log('isNan: ' + isNaN(document.getElementById(subId).innerHTML))
-                        total += parseInt(document.getElementById(subId).innerHTML);
-                    } else {
-                        total -= parseInt(document.getElementById(subId).innerHTML);
-                    }
-                    document.getElementById('total').innerHTML = total;
+                <form action="DistpatchController">
+                    Enter your Email to View Bill: <input type="text" name="txtBill" value="" />
+                    <input type="submit" class="btn btn-info" name="btAction" value="View Shopping Bill" />
+                </form>
+            </c:if>
+            <c:if test="${empty cart}">
+                <h2>No Items in Cart</h2>
+            </c:if>
+        </c:if>
+        <c:if test="${user.isAdmin == true}">
+            <h1>You cannot access this Page</h1>
+        </c:if>
+
+        <script>
+            var total = 0;
+            function calTotal(chkId, subId) {
+                var check = document.getElementById(chkId);
+                var value = document.getElementById(subId);
+                console.log(check.checked);
+                console.log(value.innerHTML);
+                if (check.checked == true) {
+                    console.log('isNan: ' + isNaN(document.getElementById(subId).innerHTML))
+                    total += parseInt(document.getElementById(subId).innerHTML);
+                } else {
+                    total -= parseInt(document.getElementById(subId).innerHTML);
                 }
+                document.getElementById('total').innerHTML = total;
+            }
 
-            </script>
-    </body>
+        </script>
+</body>
 </html>

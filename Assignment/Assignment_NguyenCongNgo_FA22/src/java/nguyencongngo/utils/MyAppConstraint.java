@@ -33,4 +33,6 @@ public class MyAppConstraint {
     public static final String buyCart = "BuyCart";
     public static final String viewShopping = "ViewShopping";
     public static final String viewShoppingPage = "shopping.jsp";
+    public static final String informationFormPage = "informationForm.jsp";
+    public static final String informationFormAction = "showInformationForm";
 }

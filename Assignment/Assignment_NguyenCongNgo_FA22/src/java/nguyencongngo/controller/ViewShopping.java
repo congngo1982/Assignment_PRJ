@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import nguyencongngo.account.AccountDTO;
 import nguyencongngo.shopping.ShoppingDAO;
 import nguyencongngo.shopping.ShoppingDTO;
+import nguyencongngo.shopping.ShoppingNoLoginDAO;
+import nguyencongngo.shopping.ShoppingNoLoginDTO;
 import nguyencongngo.utils.MyAppConstraint;
 
 /**
@@ -48,11 +50,20 @@ public class ViewShopping extends HttpServlet {
                 List<ShoppingDTO> dto = dao.getListShopping(user.getUsername());
                 request.setAttribute("SHOPPING", dto);
                 System.out.println(dto);
+            } else if (user == null) {
+                String bill = request.getParameter("txtBill");
+                ShoppingNoLoginDAO dao = new ShoppingNoLoginDAO();
+                List<ShoppingNoLoginDTO> dto = dao.getList(bill);
+                request.setAttribute("SHOPPING", dto);
+                System.out.println(dto);
             }
         } catch (SQLException | NamingException ex) {
             System.out.println("Shopping: " + ex);
         } finally {
             if (user != null && !user.isIsAdmin()) {
+                RequestDispatcher rd = request.getRequestDispatcher(MyAppConstraint.viewShoppingPage);
+                rd.forward(request, response);
+            } else if (user == null) {
                 RequestDispatcher rd = request.getRequestDispatcher(MyAppConstraint.viewShoppingPage);
                 rd.forward(request, response);
             } else {

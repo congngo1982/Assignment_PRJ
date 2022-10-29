@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
@@ -23,6 +24,8 @@ import nguyencongngo.cart.CartDAO;
 import nguyencongngo.course.CourseDAO;
 import nguyencongngo.shopping.ShoppingDAO;
 import nguyencongngo.shopping.ShoppingDTO;
+import nguyencongngo.shopping.ShoppingNoLoginDAO;
+import nguyencongngo.shopping.ShoppingNoLoginDTO;
 import nguyencongngo.utils.MyAppConstraint;
 
 /**
@@ -67,22 +70,38 @@ public class BuyCart extends HttpServlet {
 
             String[] priceCart = request.getParameterValues("txtPricee");
             String[] chk = request.getParameterValues("txtchk");
-
             Date date = new Date();
             if (chk != null) {
                 for (int i = 0; i < chk.length; i++) {
                     if (chk[i] != null) {
                         int quantity = Integer.parseInt(quantityCart[i]);
                         int price = Integer.parseInt(priceCart[i]);
-                        ShoppingDTO dto = new ShoppingDTO(user.getUsername(), courseId[i], date.toString(), quantity, price);
-                        ShoppingDAO shopping = new ShoppingDAO();
-                        shopping.checkOut(dto);
+                        if (user != null && !user.isIsAdmin()) {
+                            ShoppingDTO dto = new ShoppingDTO(user.getUsername(), courseId[i], date.toString(), quantity, price);
+                            ShoppingDAO shopping = new ShoppingDAO();
+                            shopping.checkOut(dto);
+                        } else {
+                            String email = request.getParameter(("txtEmail"));
+                            String address = request.getParameter("txtAddress");
+                            String phone = request.getParameter("txtPhone");
+                            String discount = request.getParameter("txtDiscount");
+                            String name = request.getParameter("txtName");
+                            ShoppingNoLoginDTO dto = new ShoppingNoLoginDTO(email, name, courseId[i], quantity, price, address, phone, discount);
+                            ShoppingNoLoginDAO dao = new ShoppingNoLoginDAO();
+                            if (dao.buyingCart(dto)) {
+                                HashMap<String, Integer> courseList = (HashMap<String, Integer>) session.getAttribute("CARTNOLOGIN1");
+                                List<String> course = (List<String>) session.getAttribute("CARTNOLOGIN");
+                                courseList.remove(courseId[i]);
+                                course.remove(courseId[i]);
+                            }
+                        }
+
                     }
                 }
             }
 
         } catch (SQLException | NamingException ex) {
-
+            System.out.println(ex);
         } finally {
 //            response.sendRedirect(MyAppConstraint.viewCartController);
             RequestDispatcher rd = request.getRequestDispatcher(MyAppConstraint.viewCartController);

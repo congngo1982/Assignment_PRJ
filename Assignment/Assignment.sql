@@ -50,6 +50,21 @@ price int NOT NULL,
 date NVARCHAR(50) NOT NULL
 )
 
+CREATE TABLE [ShoppingNoLogin](
+email NVARCHAR(100),
+courseId NVARCHAR(100) REFERENCES [Course](id),
+quantity int NOT NULL,
+price int NOT NULL,
+date NVARCHAR(50) NOT NULL,
+address NVARCHAR(200),
+phone NVARCHAR(10),
+discount NVARCHAR(100)
+)
+
+CREATE TABLE [Information](
+
+)
+
 SELECT *
 FROM dbo.Course
 WHERE name LIKE '%a%' AND status = 0

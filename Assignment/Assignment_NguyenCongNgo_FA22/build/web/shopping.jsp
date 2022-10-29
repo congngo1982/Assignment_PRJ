@@ -21,6 +21,9 @@
         <a href="search.jsp">
             <button type="button" class="btn">Home</button>
         </a>
+        <a href="ViewCartController">
+            <button type="button" class="btn">Your Cart</button>
+        </a>
         <c:set var="shoppingList" value="${requestScope.SHOPPING}"/>
     <div class="tableStyle">
         <table class="table table-bordered">
