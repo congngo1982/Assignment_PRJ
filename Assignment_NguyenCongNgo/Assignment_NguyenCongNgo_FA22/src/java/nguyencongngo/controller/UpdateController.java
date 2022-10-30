@@ -46,24 +46,27 @@ public class UpdateController extends HttpServlet {
         String url = MyAppConstraint.showCourse;
         if (session != null) {
             if (user != null && user.isIsAdmin()) {
-                String id = request.getParameter("txtId");
-                String name = request.getParameter("txtName");
-                String img = request.getParameter("txtImage");
-                String des = request.getParameter("txtDescription");
-                int price = Integer.parseInt(request.getParameter("txtPrice"));
-                int quantity = Integer.parseInt(request.getParameter("txtQuantity"));
-                String start = request.getParameter("txtStartDate");
-                String end = request.getParameter("txtEndDate");
-                String cate = request.getParameter("txtCategory");
-                boolean status = Boolean.parseBoolean(request.getParameter("txtStatus"));
                 try {
-                    CourseDAO dao = new CourseDAO();
-                    Date date = new Date();
-                    dao.updateCourse(user.getUsername(), id, name, img, des, price, quantity, start, end, cate, status, date.toString());
-                } catch (SQLException ex) {
+                    String id = request.getParameter("txtId");
+                    String name = request.getParameter("txtName");
+                    String img = request.getParameter("txtImage");
+                    String des = request.getParameter("txtDescription");
+                    int price = Integer.parseInt(request.getParameter("txtPrice"));
+                    int quantity = Integer.parseInt(request.getParameter("txtQuantity"));
+                    String start = request.getParameter("txtStartDate");
+                    String end = request.getParameter("txtEndDate");
+                    String cate = request.getParameter("txtCategory");
+                    boolean status = Boolean.parseBoolean(request.getParameter("txtStatus"));
+                    try {
+                        CourseDAO dao = new CourseDAO();
+                        Date date = new Date();
+                        dao.updateCourse(user.getUsername(), id, name, img, des, price, quantity, start, end, cate, status, date.toString());
+                    } catch (SQLException ex) {
 
-                } catch (NamingException ex) {
+                    } catch (NamingException ex) {
 
+                    }
+                } catch (Exception e) {
                 }
             } else if (user == null) {
                 url = MyAppConstraint.loginFailPage;

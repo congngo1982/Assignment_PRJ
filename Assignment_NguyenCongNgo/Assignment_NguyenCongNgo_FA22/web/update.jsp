@@ -86,14 +86,24 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="update">
-                                                    <form action="DistpatchController" method="POST">
-                                                        Name: <input type="text" name="txtName" value="${course.name}"> <br>
+                                                    <form id="form" action="DistpatchController" method="POST">
+                                                        Name: <input id="name" type="text" name="txtName" value="${course.name}" required>
+                                                        <span id="errorName"></span>
+                                                        <br>
                                                         Image: <input type="text" name="txtImage" value="${course.image}"> <br>
                                                         Description: <input type="text" name="txtDescription" value="${course.description}"> <br>
-                                                        Price: <input type="text" name="txtPrice" value="${course.price}"> <br>
-                                                        Quantity: <input type="text" name="txtQuantity" value="${course.quantity}"> <br>
-                                                        Start Date: <input type="text" name="txtStartDate" value="${course.startDate}"> <br>
-                                                        End Date: <input type="text" name="txtEndDate" value="${course.endDate}"> <br>
+                                                        Price: <input id="price" type="text" name="txtPrice" value="${course.price}" required> 
+                                                        <span id="errorPrice"></span>
+                                                        <br>
+                                                        Quantity: <input id="quantity" type="text" name="txtQuantity" value="${course.quantity}" required> 
+                                                        <span id="errorQuantity"></span>
+                                                        <br>
+                                                        Start Date: <input id="startDate" type="text" name="txtStartDate" value="${course.startDate}" required> 
+                                                        <span id="errorStart"></span>
+                                                        <br>
+                                                        End Date: <input id="endDate" type="text" name="txtEndDate" value="${course.endDate}" required> 
+                                                        <span id="errorEnd"></span>
+                                                        <br>
                                                         Category: 
                                                         <select name="txtCategory">
                                                             <option value="${course.category}">${course.category}</option>
@@ -162,6 +172,49 @@
 
                 }
             }
+            console.log("Date: " + new Date(document.getElementById("startDate").value))
+            // Check Validation
+            var form = document.getElementById("form");
+            form.addEventListener('submit', (e) => {
+                var nameCourse = document.getElementById("name").value;
+                var price = parseInt(document.getElementById("price").value);
+                var quantity = parseInt(document.getElementById("quantity").value);
+                var startDate = new Date(document.getElementById("startDate").value);
+                var endDate = new Date(document.getElementById("endDate").value);
+                var error = false;
+                if (nameCourse.trim() == '') {
+                    document.getElementById("errorName").innerHTML = "Not Empty here !!!";
+                    error = true;
+                } else {
+                    document.getElementById("errorName").innerHTML = "";
+                }
+                if (isNaN(price)) {
+                    document.getElementById("errorPrice").innerHTML = "Must Number here !!!";
+                    error = true;
+                } else {
+                    document.getElementById("errorPrice").innerHTML = "";
+                }
+                if (isNaN(quantity)) {
+                    document.getElementById("errorQuantity").innerHTML = "Must Number here !!!";
+                    error = true;
+                } else {
+                    if (quantity < 0) {
+                        document.getElementById("errorQuantity").innerHTML = "Quantity must be >= 0";
+                        error = true;
+                    } else {
+                        document.getElementById("errorQuantity").innerHTML = "";
+                    }
+                }
+                if (startDate - endDate >= 0 || startDate == null || endDate == null) {
+                    document.getElementById("errorEnd").innerHTML = "End Date must be After Start Date";
+                    error = true;
+                } else {
+                    document.getElementById("errorEnd").innerHTML = "";
+                }
+                if (error) {
+                    e.preventDefault();
+                }
+            })
         </script>
     </body>
 </html>
