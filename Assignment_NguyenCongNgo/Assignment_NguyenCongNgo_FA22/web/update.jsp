@@ -87,22 +87,22 @@
                                             <div class="modal-body">
                                                 <div class="update">
                                                     <form id="form" action="DistpatchController" method="POST">
-                                                        Name: <input id="name" type="text" name="txtName" value="${course.name}" required>
-                                                        <span id="errorName"></span>
+                                                        Name: <input class="name${counter.count}" type="text" name="txtName" value="${course.name}" required>
+                                                        <span class="errorName${counter.count}"></span>
                                                         <br>
                                                         Image: <input type="text" name="txtImage" value="${course.image}"> <br>
                                                         Description: <input type="text" name="txtDescription" value="${course.description}"> <br>
-                                                        Price: <input id="price" type="text" name="txtPrice" value="${course.price}" required> 
-                                                        <span id="errorPrice"></span>
+                                                        Price: <input class="price${counter.count}" type="text" name="txtPrice" value="${course.price}" required> 
+                                                        <span class="errorPrice${counter.count}"></span>
                                                         <br>
-                                                        Quantity: <input id="quantity" type="text" name="txtQuantity" value="${course.quantity}" required> 
-                                                        <span id="errorQuantity"></span>
+                                                        Quantity: <input class="quantity${counter.count}" type="text" name="txtQuantity" value="${course.quantity}" required> 
+                                                        <span class="errorQuantity${counter.count}"></span>
                                                         <br>
-                                                        Start Date: <input id="startDate" type="text" name="txtStartDate" value="${course.startDate}" required> 
-                                                        <span id="errorStart"></span>
+                                                        Start Date: <input class="startDate${counter.count}" type="text" name="txtStartDate" value="${course.startDate}" required> 
+                                                        <span class="errorStart${counter.count}"></span>
                                                         <br>
-                                                        End Date: <input id="endDate" type="text" name="txtEndDate" value="${course.endDate}" required> 
-                                                        <span id="errorEnd"></span>
+                                                        End Date: <input class="endDate${counter.count}" type="text" name="txtEndDate" value="${course.endDate}" required> 
+                                                        <span class="errorEnd${counter.count}"></span>
                                                         <br>
                                                         Category: 
                                                         <select name="txtCategory">

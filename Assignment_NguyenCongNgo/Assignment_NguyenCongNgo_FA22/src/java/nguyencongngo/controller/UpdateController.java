@@ -8,6 +8,7 @@ package nguyencongngo.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import nguyencongngo.account.AccountDTO;
 import nguyencongngo.course.CourseDAO;
+import nguyencongngo.utils.MakeLifeEasy;
 import nguyencongngo.utils.MyAppConstraint;
 
 /**
@@ -55,18 +57,21 @@ public class UpdateController extends HttpServlet {
                     int quantity = Integer.parseInt(request.getParameter("txtQuantity"));
                     String start = request.getParameter("txtStartDate");
                     String end = request.getParameter("txtEndDate");
-                    String cate = request.getParameter("txtCategory");
-                    boolean status = Boolean.parseBoolean(request.getParameter("txtStatus"));
-                    try {
+                    if (MakeLifeEasy.subtractDay(start, end) <= 0) {
+                        String cate = request.getParameter("txtCategory");
+                        boolean status = Boolean.parseBoolean(request.getParameter("txtStatus"));
+//                    try {
                         CourseDAO dao = new CourseDAO();
                         Date date = new Date();
                         dao.updateCourse(user.getUsername(), id, name, img, des, price, quantity, start, end, cate, status, date.toString());
-                    } catch (SQLException ex) {
-
-                    } catch (NamingException ex) {
-
                     }
-                } catch (Exception e) {
+
+//                    } catch (SQLException ex) {
+//
+//                    } catch (NamingException ex) {
+//
+//                    }
+                } catch (SQLException | NamingException | ParseException | NumberFormatException e) {
                 }
             } else if (user == null) {
                 url = MyAppConstraint.loginFailPage;
